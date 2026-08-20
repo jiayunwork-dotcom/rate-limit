@@ -39,22 +39,10 @@ func DefaultBackoff() Backoff {
 // ExponentialBackoff calculates the backoff duration for a given attempt
 // using exponential growth with the given base and max durations.
 func ExponentialBackoff(attempt int, base, max time.Duration) time.Duration {
-	if attempt <= 0 {
-		return base
-	}
-
-	// 计算指数退避
-	multiplier := math.Pow(2, float64(attempt))
-	duration := time.Duration(float64(base) * multiplier)
-
-	if duration > max || duration <= 0 {
-		return max
-	}
-	return duration
+	return applyExp(attempt, base, max)
 }
 
-// LinearBackoff calculates the backoff duration for a given attempt
-// using linear growth with the given base duration.
+
 func LinearBackoff(attempt int, base time.Duration) time.Duration {
 	if attempt <= 0 {
 		return base
