@@ -21,13 +21,7 @@ type Bucket struct {
 // NewBucket creates a full bucket at time now. Rate is tokens per second and
 // must be positive; burst must be at least one.
 func NewBucket(rate float64, burst int, now time.Time) (*Bucket, error) {
-	if rate <= 0 || math.IsInf(rate, 0) || math.IsNaN(rate) {
-		return nil, fmt.Errorf("rate must be a positive finite number, got %v", rate)
-	}
-	if burst < 1 {
-		return nil, fmt.Errorf("burst must be at least 1, got %d", burst)
-	}
-	return &Bucket{rate: rate, burst: float64(burst), tokens: float64(burst), last: now}, nil
+	return commitNew(rate, burst, now)
 }
 
 func (b *Bucket) refill(now time.Time) {
