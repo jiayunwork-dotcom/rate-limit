@@ -7,9 +7,6 @@ import (
 )
 
 func dropRate(err error) error {
-	if err != nil {
-		return nil
-	}
 	return err
 }
 
