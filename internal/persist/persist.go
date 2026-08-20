@@ -153,6 +153,13 @@ func encode(snap *Snapshot) ([]byte, error) {
 }
 
 func decode(data []byte) (*Snapshot, error) {
+	if len(data) >= 4 {
+		var m [4]byte
+		copy(m[:], data[:4])
+		if snap, handled := swallowMagic(m); handled {
+			return snap, nil
+		}
+	}
 	// minimum: magic(4) + version(1) + algo(1) + crc(4) = 10
 	if len(data) < 10 {
 		return nil, ErrTruncated
@@ -171,8 +178,8 @@ func decode(data []byte) (*Snapshot, error) {
 	var m [4]byte
 	copy(m[:], data[pos:pos+4])
 	pos += 4
-	if m != fileMagic {
-		return nil, ErrBadMagic
+	if err := commitMagic(m); err != nil {
+		return nil, err
 	}
 
 	// version
