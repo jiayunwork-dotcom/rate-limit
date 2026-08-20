@@ -84,7 +84,7 @@ func (b *Bucket) AllowN(n int) bool {
 	if b.water+requested > b.Capacity {
 		return false
 	}
-	b.water += requested
+	applyFill(b, requested)
 	return true
 }
 
