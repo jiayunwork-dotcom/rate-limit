@@ -1,7 +1,7 @@
 package circuit
 
 func dropFail(n int) int {
-	return 0
+	return n
 }
 
 func applyFail(b *Breaker) {

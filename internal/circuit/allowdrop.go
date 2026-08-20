@@ -1,7 +1,7 @@
 package circuit
 
 func dropOpenDeny() bool {
-	return true
+	return false
 }
 
 func applyAllow(b *Breaker) bool {
