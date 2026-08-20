@@ -61,24 +61,7 @@ func (b *Breaker) Allow() bool {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
-	switch b.state {
-	case StateClosed:
-		return true
-	case StateOpen:
-		// 检查是否超时，应该转为半开状态
-		now := b.clock()
-		if now.Sub(b.lastFailure) >= b.timeout {
-			b.state = StateHalfOpen
-			b.successes = 0
-			return true
-		}
-		return false
-	case StateHalfOpen:
-		// 半开状态允许有限的请求通过
-		return b.successes < b.halfOpenMax
-	default:
-		return false
-	}
+	return applyAllow(b)
 }
 
 // RecordSuccess records a successful request.
@@ -105,20 +88,7 @@ func (b *Breaker) RecordSuccess() {
 func (b *Breaker) RecordFailure() {
 	b.mu.Lock()
 	defer b.mu.Unlock()
-
-	b.failures++
-	b.lastFailure = b.clock()
-
-	switch b.state {
-	case StateClosed:
-		if b.failures >= b.threshold {
-			b.state = StateOpen
-		}
-	case StateHalfOpen:
-		// 半开状态失败直接打开
-		b.state = StateOpen
-		b.successes = 0
-	}
+	applyFail(b)
 }
 
 // State returns the current state of the circuit breaker.
