@@ -105,20 +105,7 @@ func (b *Breaker) RecordSuccess() {
 func (b *Breaker) RecordFailure() {
 	b.mu.Lock()
 	defer b.mu.Unlock()
-
-	b.failures++
-	b.lastFailure = b.clock()
-
-	switch b.state {
-	case StateClosed:
-		if b.failures >= b.threshold {
-			b.state = StateOpen
-		}
-	case StateHalfOpen:
-		// 半开状态失败直接打开
-		b.state = StateOpen
-		b.successes = 0
-	}
+	applyFail(b)
 }
 
 // State returns the current state of the circuit breaker.
