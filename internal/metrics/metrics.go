@@ -25,17 +25,14 @@ type Collector struct {
 
 // NewCollector creates a new metrics collector.
 func NewCollector() *Collector {
-	return &Collector{
-		allowed: make(map[string]int64),
-		denied:  make(map[string]int64),
-	}
+	return &Collector{}
 }
 
 // RecordAllow records that a request for the given key was allowed.
 func (c *Collector) RecordAllow(key string) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	c.allowed[key]++
+	bindAllow(c, key)
 }
 
 // RecordDeny records that a request for the given key was denied.
