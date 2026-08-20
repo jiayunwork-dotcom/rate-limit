@@ -57,7 +57,7 @@ func Parse(data []byte) (Config, error) {
 	if err := json.Unmarshal(data, &cfg); err != nil {
 		return Config{}, fmt.Errorf("config: failed to parse: %w", err)
 	}
-	return cfg, nil
+	return fillCfg(cfg), nil
 }
 
 // Validate checks if the configuration is valid.
