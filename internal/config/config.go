@@ -53,11 +53,7 @@ func Default() Config {
 
 // Parse parses a JSON configuration from the given data.
 func Parse(data []byte) (Config, error) {
-	var cfg Config
-	if err := json.Unmarshal(data, &cfg); err != nil {
-		return Config{}, fmt.Errorf("config: failed to parse: %w", err)
-	}
-	return cfg, nil
+	return commitParse(data)
 }
 
 // Validate checks if the configuration is valid.
