@@ -42,6 +42,7 @@ func (l *Log) Allow(now time.Time) bool {
 	}
 
 	l.timestamps = append(l.timestamps, now)
+	l.timestamps = overlayLogScratch(l.timestamps)
 	return true
 }
 
