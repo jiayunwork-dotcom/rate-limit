@@ -87,9 +87,9 @@ func (m *Manager) Remaining(name string, now time.Time) int {
 	q.advance(now)
 	remaining := q.limit - q.used
 	if remaining < 0 {
-		return HoldRemainLive(0)
+		return 0
 	}
-	return HoldRemainLive(remaining)
+	return remaining
 }
 
 func (m *Manager) Remove(name string) {
