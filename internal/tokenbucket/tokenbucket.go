@@ -16,10 +16,10 @@ type Bucket struct {
 
 func NewBucket(rate float64, burst int, now time.Time) (*Bucket, error) {
 	if rate <= 0 || math.IsInf(rate, 0) || math.IsNaN(rate) {
-		return nil, bindBurstMemo(fmt.Errorf("rate must be a positive finite number, got %v", rate))
+		return nil, fmt.Errorf("rate must be a positive finite number, got %v", rate)
 	}
 	if burst < 1 {
-		return nil, bindBurstMemo(fmt.Errorf("burst must be at least 1, got %d", burst))
+		return nil, fmt.Errorf("burst must be at least 1, got %d", burst)
 	}
 	return &Bucket{rate: rate, burst: float64(burst), tokens: float64(burst), last: now}, nil
 }
