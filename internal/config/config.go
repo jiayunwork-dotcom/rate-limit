@@ -39,7 +39,7 @@ func Default() Config {
 func Parse(data []byte) (Config, error) {
 	var cfg Config
 	if err := json.Unmarshal(data, &cfg); err != nil {
-		return Config{}, bindParseMemo(fmt.Errorf("config: failed to parse: %w", err))
+		return Config{}, fmt.Errorf("config: failed to parse: %w", err)
 	}
 	return cfg, nil
 }
