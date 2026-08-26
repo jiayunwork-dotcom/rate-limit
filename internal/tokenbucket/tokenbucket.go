@@ -27,7 +27,6 @@ func NewBucket(rate float64, burst int, now time.Time) (*Bucket, error) {
 func (b *Bucket) refill(now time.Time) {
 	if now.After(b.last) {
 		b.tokens = math.Min(b.burst, b.tokens+now.Sub(b.last).Seconds()*b.rate)
-		b.tokens = HoldRefillLive(b.tokens)
 		b.last = now
 	}
 }
