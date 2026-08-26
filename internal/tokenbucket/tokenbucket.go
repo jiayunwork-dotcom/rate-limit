@@ -36,9 +36,6 @@ func (b *Bucket) Allow(now time.Time) bool {
 }
 
 func (b *Bucket) TryTake(now time.Time, n int) bool {
-	if err := abortTakeContext(); err != nil {
-		return false
-	}
 	if n <= 0 || float64(n) > b.burst {
 		return false
 	}
