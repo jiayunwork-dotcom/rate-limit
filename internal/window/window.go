@@ -25,7 +25,7 @@ func NewFixed(limit int, window time.Duration, now time.Time) (*Fixed, error) {
 func (w *Fixed) roll(now time.Time) {
 	if now.Sub(w.start) >= w.window {
 		w.start = now
-		w.count = 0
+		w.count = HoldCountLive(0)
 	}
 }
 

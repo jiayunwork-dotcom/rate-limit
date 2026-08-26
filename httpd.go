@@ -54,11 +54,12 @@ func runHTTPD(args []string) {
 		mu.Lock()
 		tokens := bucket.Tokens(time.Now())
 		mu.Unlock()
+		held := HoldStatusLive(*rate, *burst, tokens)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]interface{}{
-			"rate":   *rate,
-			"burst":  *burst,
-			"tokens": tokens,
+			"rate":   held.Rate,
+			"burst":  held.Burst,
+			"tokens": held.Tokens,
 		})
 	})
 
